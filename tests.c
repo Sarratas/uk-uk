@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <sys/mman.h>
 
 #include "utils.h"
 
@@ -33,8 +36,60 @@ int test_queue()
     return 0;
 }
 
+int interactive_test_queue()
+{
+    queue my_queue = *get_queue();
+    for (int i = 0, k;i < QUEUE_SIZE + 3; ++i)
+    {
+        scanf("%d", &k);
+        enqueue(&my_queue, k % 5);
+        printf("deq %d\n", dequeue(&my_queue));
+    }
+    return 0;
+}
+
+void *get_shared_memory(size_t size)
+{
+    int protection = PROT_READ | PROT_WRITE;
+    int visibility = MAP_ANONYMOUS | MAP_SHARED;
+    return mmap(NULL, size, protection, visibility, 0, 0);
+}
+
+int test_shared_memory_queue()
+{
+    queue *q = get_queue();
+    void *queue_pointer = get_shared_memory(sizeof(*q));
+    memcpy(queue_pointer, q, sizeof(*q));
+    pid_t pid[2];
+    pid[0] = fork();
+    if (pid[0] == 0)
+    {
+        queue *qq = get_queue();
+        enqueue(qq, LEFT);
+        enqueue(qq, SHOOT);
+        memcpy(queue_pointer, qq, sizeof(*qq));
+        free(qq);
+        exit(0);
+    }
+    pid[1] = fork();
+    if (pid[1] == 0)
+    {
+        queue *qq = (queue *)queue_pointer;
+        printf("%d\n", dequeue(qq));
+        printf("%d\n", dequeue(qq));
+        memcpy(queue_pointer, qq, sizeof(*qq));
+        free(qq);
+        exit(0);
+    }
+    return 0;
+}
+
 int main(int argc, char *argv[])
 {
-    test_queue();
+    // test_queue();
+    // printf("\n");
+    // test_shared_memory_queue();
+    // printf("\n");
+    interactive_test_queue();
     return 0;
 }

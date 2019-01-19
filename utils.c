@@ -10,6 +10,7 @@ int init_queue(queue *object)
     {
         object->elements[i].next = (i + 1) % QUEUE_SIZE;
         object->elements[i].prev = i - 1 < 0 ? QUEUE_SIZE - 1 : i - 1;
+        object->elements[i].move = 0;
     }
     return 0;
 }
