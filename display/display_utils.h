@@ -13,3 +13,4 @@ void clean_screen();
 void printf_colour(char *, char);
 void print_matrix(char[HEIGTH][WIDTH]);
 int roll_matrix_and_rand_stones(char[HEIGTH][WIDTH], int);
+void print_ammo_and_points(int, int);

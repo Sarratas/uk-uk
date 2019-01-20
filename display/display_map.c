@@ -17,6 +17,7 @@ int analize_state_and_display(char **matrix_b, int *state)
 
         k = roll_matrix_and_rand_stones(matrix, 3);
         print_matrix(matrix);
+        print_ammo_and_points(0, i);
         if (k != 0)
         {
             *state = -1;

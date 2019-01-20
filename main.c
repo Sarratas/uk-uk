@@ -20,10 +20,13 @@ int main(int argc, char *argv[])
     matrix[HEIGTH - 1][WIDTH / 2] = 'X';
     void *matrix_pointer = get_shared_memory((size_t)(HEIGTH * WIDTH));
     memcpy(matrix_pointer, matrix, (size_t)(HEIGTH * WIDTH));
-    int *state = malloc(sizeof(int));
-    *state = 0;
-    void *state_pointer = get_shared_memory(sizeof(int));
-    memcpy(state_pointer, state, sizeof(int));
+
+    points_state_ammo data;
+    data.ammo = 5;
+    data.points = 0;
+    data.state = 0;
+    void *state_pointer = get_shared_memory(sizeof(points_state_ammo));
+    memcpy(state_pointer, &data, sizeof(int));
 
     static struct termios oldt, newt;
     tcgetattr(STDIN_FILENO, &oldt);
@@ -36,7 +39,7 @@ int main(int argc, char *argv[])
     pid[0] = fork();
     if (pid[0] == 0)
     {
-        display_map_thread((char **)(matrix_pointer), (int *)state_pointer);
+        display_map_thread((char **)(matrix_pointer), (points_state_ammo *)state_pointer);
     }
     else if (pid[0] == -1)
         return 0;
@@ -44,7 +47,7 @@ int main(int argc, char *argv[])
     pid[1] = fork();
     if (pid[1] == 0)
     {
-        controls_thread(queue_pointer, (int *)state_pointer);
+        controls_thread(queue_pointer, (points_state_ammo *)state_pointer);
     }
     else if (pid[0] == -1)
         return 0;
@@ -52,7 +55,7 @@ int main(int argc, char *argv[])
     pid[2] = fork();
     if (pid[2] == 0)
     {
-        display_player_thread(queue_pointer, (char **)(matrix_pointer), (int *)state_pointer);
+        display_player_thread(queue_pointer, (char **)(matrix_pointer), (points_state_ammo *)state_pointer);
     }
     else if (pid[2] == -1)
         return 0;

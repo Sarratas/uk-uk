@@ -61,3 +61,12 @@ int roll_matrix_and_rand_stones(char matrix[HEIGTH][WIDTH], int number)
         matrix[0][rand() % WIDTH] = 'W';
     return result;
 }
+
+void print_ammo_and_points(int ammo, int points)
+{
+    printf("%s", CYNAN);
+    for (int i = 0; i < WIDTH; ++i)
+        printf("O");
+    printf("\n");
+    printf("%sAmmo: %5d  Score %5d\n", YELLLOW, ammo, points);
+}

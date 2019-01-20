@@ -37,3 +37,10 @@ int enqueue(queue *, int);
 int dequeue(queue *);
 
 void *get_shared_memory(size_t);
+
+typedef struct
+{
+    int points,
+        state,
+        ammo;
+} points_state_ammo;
