@@ -64,10 +64,10 @@ int test_shared_memory_queue()
     pid[0] = fork();
     if (pid[0] == 0)
     {
-        queue *qq = get_queue();
+        queue *qq = (queue *)queue_pointer;
         enqueue(qq, LEFT);
         enqueue(qq, SHOOT);
-        memcpy(queue_pointer, qq, sizeof(*qq));
+        // memcpy(queue_pointer, qq, sizeof(*qq));
         free(qq);
         exit(0);
     }
@@ -88,8 +88,8 @@ int main(int argc, char *argv[])
 {
     // test_queue();
     // printf("\n");
-    // test_shared_memory_queue();
+    test_shared_memory_queue();
     // printf("\n");
-    interactive_test_queue();
+    // interactive_test_queue();
     return 0;
 }
