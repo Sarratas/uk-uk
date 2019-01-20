@@ -1,4 +1,9 @@
 #include <stdlib.h>
+#include <sys/mman.h>
+
+#ifdef DEBUG
+#include <stdio.h>
+#endif
 
 #include "utils.h"
 
@@ -24,6 +29,9 @@ queue *get_queue()
 
 int enqueue(queue *q, int move)
 {
+#ifdef DEBUG
+    printf("enqueue: %d ", move);
+#endif
     q->elements[q->last].move = move;
     q->last = q->elements[q->last].next;
     return 0;
@@ -32,8 +40,18 @@ int enqueue(queue *q, int move)
 int dequeue(queue *q)
 {
     if (q->first == q->last)
-        return FAIL;
+        return -1;
     enum moves current = q->elements[q->first].move;
     q->first = q->elements[q->first].next;
+#ifdef DEBUG
+    printf("dequeue: %d ", current);
+#endif
     return current;
+}
+
+void *get_shared_memory(size_t size)
+{
+    int protection = PROT_READ | PROT_WRITE;
+    int visibility = MAP_ANONYMOUS | MAP_SHARED;
+    return mmap(NULL, size, protection, visibility, 0, 0);
 }

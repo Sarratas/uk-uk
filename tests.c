@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <sys/mman.h>
+#include <sys/wait.h>
 
 #include "utils.h"
 
@@ -39,7 +40,7 @@ int test_queue()
 int interactive_test_queue()
 {
     queue my_queue = *get_queue();
-    for (int i = 0, k;i < QUEUE_SIZE + 3; ++i)
+    for (int i = 0, k; i < QUEUE_SIZE + 3; ++i)
     {
         scanf("%d", &k);
         enqueue(&my_queue, k % 5);
@@ -66,21 +67,39 @@ int test_shared_memory_queue()
     {
         queue *qq = (queue *)queue_pointer;
         enqueue(qq, LEFT);
+        printf("en: %d\n", LEFT);
         enqueue(qq, SHOOT);
+        printf("en: %d\n", SHOOT);
+        enqueue(qq, SHOOT);
+        printf("en: %d\n", SHOOT);
+        enqueue(qq, SHOOT);
+        printf("en: %d\n", RIGHT);
+        enqueue(qq, SHOOT);
+        printf("en: %d\n", SHOOT);
+        usleep(1000 * 1000);
+        enqueue(qq, SHOOT);
+        printf("en: %d\n", SHOOT);
+        enqueue(qq, SHOOT);
+        printf("en: %d\n", SHOOT);
         // memcpy(queue_pointer, qq, sizeof(*qq));
-        free(qq);
+        // free(qq);
         exit(0);
     }
     pid[1] = fork();
     if (pid[1] == 0)
     {
         queue *qq = (queue *)queue_pointer;
-        printf("%d\n", dequeue(qq));
-        printf("%d\n", dequeue(qq));
-        memcpy(queue_pointer, qq, sizeof(*qq));
-        free(qq);
+        printf("de: %d\n", dequeue(qq));
+        printf("de: %d\n", dequeue(qq));
+        usleep(1000 * 1000);
+        printf("de: %d\n", dequeue(qq));
+        printf("de: %d\n", dequeue(qq));
+        // memcpy(queue_pointer, qq, sizeof(*qq));
+        // free(qq);
         exit(0);
     }
+    waitpid(pid[0], NULL, 0);
+    waitpid(pid[1], NULL, 0);
     return 0;
 }
 

@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #define QUEUE_SIZE 1024
 
 enum moves
@@ -6,7 +8,8 @@ enum moves
     RIGHT,
     LEFT,
     SHOOT,
-    FAIL
+    FAIL,
+    STOP
 };
 
 typedef struct elem elem;
@@ -32,3 +35,5 @@ queue *get_queue();
 int enqueue(queue *, int);
 
 int dequeue(queue *);
+
+void *get_shared_memory(size_t);
