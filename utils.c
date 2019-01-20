@@ -29,9 +29,6 @@ queue *get_queue()
 
 int enqueue(queue *q, int move)
 {
-#ifdef DEBUG
-    printf("enqueue: %d ", move);
-#endif
     q->elements[q->last].move = move;
     q->last = q->elements[q->last].next;
     return 0;
@@ -43,9 +40,6 @@ int dequeue(queue *q)
         return -1;
     enum moves current = q->elements[q->first].move;
     q->first = q->elements[q->first].next;
-#ifdef DEBUG
-    printf("dequeue: %d ", current);
-#endif
     return current;
 }
 
