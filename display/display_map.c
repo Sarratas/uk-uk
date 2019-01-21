@@ -15,9 +15,11 @@ int analize_state_and_display(char **matrix_b, points_state_ammo *state)
             return 0;
         clean_screen();
 
-        k = roll_matrix_and_rand_stones(matrix, 3);
+        k = roll_matrix_and_rand_stones(matrix, WIDTH / 2);
         print_matrix(matrix);
         state->points += 1;
+        if (i % (HEIGTH / 4) == 0)
+            state->ammo = state->ammo >= 5 ? 5 : state->ammo + 1;
         print_ammo_and_points(state->ammo, i);
         if (k != 0)
         {

@@ -26,10 +26,13 @@ void print_matrix(char matrix[HEIGTH][WIDTH])
                 printf_colour(GREEN, 'W');
                 break;
             case 'M':
-                printf_colour(YELLLOW, 'W');
+                printf_colour(WHITE, 'W');
                 break;
             case 'X':
-                printf_colour(RED, 'X');
+                printf_colour(YELLLOW, 'X');
+                break;
+            case 'i':
+                printf_colour(RED, 'i');
                 break;
             default:
                 printf(" ");
@@ -48,7 +51,7 @@ int roll_matrix_and_rand_stones(char matrix[HEIGTH][WIDTH], int number)
         {
             if (matrix[i][k] == 'X')
             {
-                if (matrix[i - 1][k] != 0)
+                if (matrix[i - 1][k] != 0 && matrix[i - 1][k] != 'i')
                     result = 1;
                 continue;
             }
@@ -57,7 +60,8 @@ int roll_matrix_and_rand_stones(char matrix[HEIGTH][WIDTH], int number)
     }
     for (int i = 0; i < WIDTH; ++i)
         matrix[0][i] = 0;
-    for (int i = 0; i < number; ++i)
+    int n = rand() % number;
+    for (int i = 0; i < n; ++i)
         matrix[0][rand() % WIDTH] = 'W';
     return result;
 }
