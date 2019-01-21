@@ -2,19 +2,18 @@
 #include <unistd.h>
 #include <string.h>
 
-#include "../utils.h"
 #include "moves.h"
 
-int read_and_enqueue(queue *q_b, int *state)
+int read_and_enqueue(queue *q_b, points_state_ammo *state)
 {
     unsigned char tmp = 0;
     queue *q = q_b;
     while (1)
     {
-        if (*state == -1)
+        if (state->state == -1)
             break;
         tmp = getchar();
-        if (*state == -1)
+        if (state->state == -1)
             break;
         switch (tmp)
         {
@@ -38,7 +37,7 @@ int read_and_enqueue(queue *q_b, int *state)
     return 0;
 }
 
-void controls_thread(void *queue_pointer, int *state)
+void controls_thread(void *queue_pointer, points_state_ammo *state)
 {
     queue *q = (queue *)queue_pointer;
     read_and_enqueue(q, state);

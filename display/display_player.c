@@ -5,7 +5,6 @@
 
 #include "display_player.h"
 #include "display_utils.h"
-#include "../utils.h"
 
 int get_player_position(char matrix[HEIGTH][WIDTH])
 {
@@ -15,14 +14,14 @@ int get_player_position(char matrix[HEIGTH][WIDTH])
     return index;
 }
 
-int dequeue_and_display(queue *q_b, char **matrix_b, int *state)
+int dequeue_and_display(queue *q_b, char **matrix_b, points_state_ammo *state)
 {
     char matrix[HEIGTH][WIDTH];
     queue *q = q_b;
     int tmp = 0;
     while (1)
     {
-        if (*state == -1)
+        if (state->state == -1)
         {
             return 0;
         }
@@ -32,7 +31,7 @@ int dequeue_and_display(queue *q_b, char **matrix_b, int *state)
             continue;
         if (tmp == STOP)
         {
-            *state = -1;
+            state->state = -1;
             return 0;
         }
         if (tmp == RIGHT || tmp == LEFT)
@@ -45,20 +44,21 @@ int dequeue_and_display(queue *q_b, char **matrix_b, int *state)
             {
                 matrix[HEIGTH - 1][index] = 0;
                 matrix[HEIGTH - 1][new_index] = 'X';
-                *state = -1;
+                state->state = -1;
                 return 0;
             }
             matrix[HEIGTH - 1][index] = 0;
             matrix[HEIGTH - 1][new_index] = 'X';
             clean_screen();
             print_matrix(matrix);
+            print_ammo_and_points(state->ammo, state->points);
             memcpy(matrix_b, matrix, HEIGTH * WIDTH);
         }
     }
     return 0;
 }
 
-void display_player_thread(void *queue_pointer, char **matrix, int *state)
+void display_player_thread(void *queue_pointer, char **matrix, points_state_ammo *state)
 {
     dequeue_and_display((queue *)queue_pointer, matrix, state);
     exit(0);

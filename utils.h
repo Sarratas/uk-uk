@@ -1,3 +1,4 @@
+#pragma once
 #include <stdlib.h>
 
 #define QUEUE_SIZE 1024

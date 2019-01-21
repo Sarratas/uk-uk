@@ -1,5 +1,5 @@
-#define WIDTH 40
-#define HEIGTH 20
+#define WIDTH 100
+#define HEIGTH 50
 
 #define RED "\x1B[31m"
 #define GREEN "\x1B[32m"

@@ -22,9 +22,6 @@ int main(int argc, char *argv[])
     memcpy(matrix_pointer, matrix, (size_t)(HEIGTH * WIDTH));
 
     points_state_ammo data;
-    data.ammo = 5;
-    data.points = 0;
-    data.state = 0;
     void *state_pointer = get_shared_memory(sizeof(points_state_ammo));
     memcpy(state_pointer, &data, sizeof(int));
 
